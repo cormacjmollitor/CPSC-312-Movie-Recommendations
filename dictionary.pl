@@ -1,3 +1,20 @@
+starter_phrase(['What', 'is' | P], P).
+starter_phrase(['What', '\'', 's' | T], T).
+starter_phrase([Imperative | T], T) :-
+    imperative(Imperative).
+starter_phrase([Imperative, Asker | T], T) :-
+    imperative(Imperative).
+    asker(Asker).
+starter_phrase(['I', 'want' | P], P).
+starter_phrase(['I', 'want', 'to', 'watch' | P], P).
+
+imperative('Give').
+imperative('Suggest').
+imperative('Recommend').
+
+asker('me').
+asker('us').
+
 % e.g. a 2010 Christopher Nolan crime movie starring Ellen Page
 noun_phrase(P0, P6, Entity, C0, C6) :-
     det(P0, P1, Entity, C0, C1),
