@@ -1,40 +1,35 @@
-:- module(api, [call_search/2, call_person_search/2, call_discover/2]).
+:- module(api, [call_person_search/2, call_keyword_search/2, call_discover/2]).
 
 :- use_module(library(http/http_client)).
 :- use_module(library(http/json)).
 :- use_module(library(uri)).
 
-% Example: call_search("marvel", Result).
-% Example function (with helper), gets 1st movie response.
-% example(Result) :-
-%	 call_search("marvel", Response),
-%	 take_1(Response.results, Result).
-% take_1([H|_], [H]). 
-
 api_key("af6b91ab4956fb3956740409f847efbb").
 discover_url("https://api.themoviedb.org/3/discover/movie").
-search_url("https://api.themoviedb.org/3/search/movie").
 search_person_url("https://api.themoviedb.org/3/search/person").
+search_keyword_url("https://api.themoviedb.org/3/search/keyword").
 
-% Perform a search on Query string in tmdb search api.
-call_search(Query, Response) :-
-	search_url(BaseUrl),
-	uri_encoded(query_value, Query, EncodedQuery),
-	generate_url(BaseUrl, [("query", EncodedQuery)], RequestUrl),
-	make_request(RequestUrl, Response).
-
-% Perform a search for a specific person id
+% Perform a search on people.
 call_person_search(Name, Response) :-
-	search_person_url(BaseUrl),
-	uri_encoded(query_value, Name, EncodedQuery),
-	generate_url(BaseUrl, [("query", EncodedQuery)], RequestUrl),
-	make_request(RequestUrl, Response).
+	search_person_url(Url),
+	call_search(Name, Url, Response).
+
+% Perform a search on keywords.
+call_keyword_search(Name, Response) :-
+	search_keyword_url(Url),
+	call_search(Name, Url, Response).
 
 % Perform a /discover call to tmdb api.
 % Assumes all params are valid /discover properties.
 call_discover(Params, Response) :-
 	discover_url(DiscoverUrl),
 	generate_url(DiscoverUrl, Params, RequestUrl),
+	make_request(RequestUrl, Response).
+
+% Perform a search for Query at Url.
+call_search(Query, Url, Response) :-
+	uri_encoded(query_value, Query, EncodedQuery),
+	generate_url(Url, [("query", EncodedQuery)], RequestUrl),
 	make_request(RequestUrl, Response).
 
 % Generates the correct URL with the provided query params.
