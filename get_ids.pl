@@ -1,13 +1,19 @@
+:- module(get_ids, [get_person_id/2, get_keyword_id/2, get_genre_id/2]).
+
 :- use_module(api).
 
+% Get the ID for a specified person.
 get_person_id(Name, Id) :-
 	call_person_search(Name, Response),
 	take_1(Response.results, PersonResult),
+	is_dict(PersonResult),
 	Id is PersonResult.id.
 
+% Get the ID for a specified keyword.
 get_keyword_id(Keyword, Id) :-
 	call_keyword_search(Keyword, Response),
 	take_1(Response.results, KeywordResult),
+	is_dict(KeywordResult),
 	Id is KeywordResult.id.
 
 get_genre_id("Action", 28).
