@@ -1,3 +1,4 @@
+:- module(dictionary, [starter_phrase/2, noun_phrase/5]).
 starter_phrase(['What', 'is' | P], P).
 starter_phrase(['What', '\'', 's' | T], T).
 starter_phrase([Imperative | T], T) :-
@@ -28,17 +29,26 @@ det([a | P], P, _, C, C).
 det(P, P, _, C, C).
 
 % release_date - check for year (number) or years (number + 's')
-release_date(P, P, _, C, C).
+% Why is the _ an underscore and not Entity?
+% release_date(P, P, _, C, C).
+release_date([Num|P], P, _, [number_string(_,Num)|C],C).
 
 % check for capitalization to determine if director_name?
-director_name(P, P, _, C, C).
+% Why is the _ an underscore and not Entity?
+% director_name(P, P, _, C, C).
+director_name([First, Last|P], P, _, [is_capitalized(First), is_capitalized(Last)|C], C).
 
 % genre is from a hardcoded list of TMDb's recognized genres
-genre(P, P, _, C, C).
+% genre(P, P, _, C, C).
+genre([Genre|P], P, _, [get_genre_id(Genre)|C], C).
 
-noun([movie | P], P).
-noun([film | P], P).
+noun(['movie' | P], P, _, C, C).
+noun(['film' | P], P, _, C, C).
 
 % modifying_phrase can be 'with ___', 'starring ___', 'by ___', 'directed by ___'...
 % or 'released in 2006', 'from the 1990s'...
 modifying_phrase(P, P, _, C, C).
+
+% Checks if first letter of a string is capitalized
+is_capitalized(String) :-
+    get_string_code(1,String,First),code_type(First,upper).
