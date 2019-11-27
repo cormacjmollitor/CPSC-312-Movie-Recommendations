@@ -7,10 +7,10 @@ promptUser(Ans) :-
     write("Query for movies: "),
     flush_output(current_output),
     readln(Ln),
-    question(Ln,End),
-    member(End,[[],['?'],['.']]).
+    question(Ln,End).
+    % member(End,[[],['?'],['.']]).
 
-question(P1, P3) :-
+question(P0, P3) :-
     starter_phrase(P0, P1),
-    noun_phrase(P1, P2, Params),
-    modifying_phrase(P2, P3, Params, NewParams).
+    noun_phrase(P1, P2, Params, _, _),
+    modifying_phrase(P2, P3, Params, NewParams, _).
