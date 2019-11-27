@@ -1,5 +1,8 @@
+:- module(api, [call_search/2, call_person_search/2, call_discover/2]).
+
 :- use_module(library(http/http_client)).
 :- use_module(library(http/json)).
+:- use_module(library(uri)).
 
 % Example: call_search("marvel", Result).
 % Example function (with helper), gets 1st movie response.
@@ -11,11 +14,20 @@
 api_key("af6b91ab4956fb3956740409f847efbb").
 discover_url("https://api.themoviedb.org/3/discover/movie").
 search_url("https://api.themoviedb.org/3/search/movie").
+search_person_url("https://api.themoviedb.org/3/search/person").
 
 % Perform a search on Query string in tmdb search api.
 call_search(Query, Response) :-
-	search_url(SearchUrl),
-	generate_url(SearchUrl, [("query", Query)], RequestUrl),
+	search_url(BaseUrl),
+	uri_encoded(query_value, Query, EncodedQuery),
+	generate_url(BaseUrl, [("query", EncodedQuery)], RequestUrl),
+	make_request(RequestUrl, Response).
+
+% Perform a search for a specific person id
+call_person_search(Name, Response) :-
+	search_person_url(BaseUrl),
+	uri_encoded(query_value, Name, EncodedQuery),
+	generate_url(BaseUrl, [("query", EncodedQuery)], RequestUrl),
 	make_request(RequestUrl, Response).
 
 % Perform a /discover call to tmdb api.
