@@ -29,6 +29,7 @@ det(['a' | P], P, _, C, C).
 det(P, P, _, C, C).
 
 % release_date - check for year (number) or years (number + 's')
+release_date(P, P, _, C, C).
 release_date([Num|P], P, _, [number_string(_,Num)|C],C).
 
 % check for capitalization to determine if director_name?
