@@ -40,6 +40,8 @@ parse_query_params([Constraint|T], [Param|P]) :-
     parse_query_params(T, P).
 
 % Bi-directional conversion from predicate constraint to key-value pair
+parse_query_param(rating(Rating, 'LessThan'), ('vote_average.lte', Rating)).
+parse_query_param(rating(Rating, 'GreaterThan'), ('vote_average.gte', Rating)).
 parse_query_param(date(Year, 'Year'), ('primary_release_year', Year)).
 parse_query_param(date(Year, 'BeforeYear'), ('release_date.lte', Year)).
 parse_query_param(date(Year, 'AfterYear'), ('release_date.gte', Year)).
