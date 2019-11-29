@@ -10,6 +10,7 @@ promptUser() :-
     flush_output(current_output),
     readln(Ln),
     question(Ln, Constraints),
+    % write(Constraints),
     get_recommendation(Constraints, Recommendation),
     write_results(Recommendation),
     write(Constraints). % TEMP: To show that it's parsing correctly.

@@ -147,6 +147,12 @@ modifying_phrase(P, T, _, C0, C2) :-
     release_date(P, T, _, C0, C1),
     modifying_phrase(T, _, _, C1, C2).
 
+% Modifying phrases about keyword
+% modifying_phrase(['about'|P], P, _, C0, C2) :- 
+%     keyword(P, T, _, C0, C1),
+%     modifying_phrase(T, _, _, C1, C2).
+
+% No modifying phrase
 modifying_phrase(P, P, _, C, C).
 
 % Checks if first letter of an Atom is capitalized
