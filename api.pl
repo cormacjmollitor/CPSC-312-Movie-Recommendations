@@ -1,4 +1,4 @@
-:- module(api, [call_person_search/2, call_keyword_search/2, call_discover/2]).
+:- module(api, [call_person_search/2, call_keyword_search/2, call_discover/2, take_1/2]).
 
 :- use_module(library(http/http_client)).
 :- use_module(library(http/json)).
@@ -62,3 +62,6 @@ make_request(Url, Response) :-
 	http_get(Url, JsonResponse, []),
 	atom_json_dict(JsonResponse, Response, []).
 
+% Returns the first element in a list
+take_1([], []).
+take_1([H|_], H).
