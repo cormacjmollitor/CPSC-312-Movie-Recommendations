@@ -34,14 +34,15 @@ asker('me').
 asker('us').
 
 % e.g. a 2010 Christopher Nolan crime movie starring Ellen Page
-movie_description(P0, P7, Entity, C0, C7) :-
+movie_description(P0, P8, Entity, C0, C8) :-
     det(P0, P1, Entity, C0, C1),
     quality_adj(P1, P2, Entity, C1, C2),
     release_date(P2, P3, Entity, C2, C3),
     celebrity(P3, P4, Entity, C3, C4),
-    movie_genre(P4, P5, Entity, C4, C5),
-    noun(P5, P6, Entity, C5, C6),
-    modifying_phrase(P6, P7, Entity, C6, C7).
+    keyword(P4, P5, Entity, C4, C5),
+    movie_genre(P5, P6, Entity, C5, C6),
+    noun(P6, P7, Entity, C6, C7),
+    modifying_phrase(P7, P8, Entity, C7, C8).
 
 det(['a' | P], P, _, C, C).
 det(['an' | P], P, _, C, C).
@@ -122,6 +123,9 @@ modifying_phrase(['starring'|P], P, _, C0, C2) :-
     celebrity(P, T, _, C0, C1),
     modifying_phrase(T, _, _, C1, C2).
 modifying_phrase(['directed', 'by'|P], P, _, C0, C2) :- 
+    celebrity(P, T, _, C0, C1),
+    modifying_phrase(T, _, _, C1, C2).
+modifying_phrase(['by'|P], P, _, C0, C2) :- 
     celebrity(P, T, _, C0, C1),
     modifying_phrase(T, _, _, C1, C2).
 
