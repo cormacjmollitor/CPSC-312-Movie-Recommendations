@@ -48,13 +48,13 @@ det(['a' | P], P, _, C, C).
 det(['an' | P], P, _, C, C).
 det(P, P, _, C, C).
 
-quality_adj(P, P, _, C, C).
 quality_adj(['bad' | P], P, _, [rating(5, 'LessThan')|C], C).
 quality_adj(['mediocre' | P], P, _, [rating(5, 'GreaterThan'), rating(6, 'LessThan')|C], C).
 quality_adj(['okay' | P], P, _, [rating(6, 'GreaterThan'), rating(7, 'LessThan')|C], C).
 quality_adj(['good' | P], P, _, [rating(7, 'GreaterThan') |C], C).
 quality_adj(['great' | P], P, _, [rating(8, 'GreaterThan') |C], C).
 quality_adj(['amazing' | P], P, _, [rating(9, 'GreaterThan') |C], C).
+quality_adj(P, P, _, C, C).
 
 % Query is looking for release date IN specified year
 release_date([Num|P], P, _, [date(Num, 'Year')|C], C) :- number(Num).
@@ -91,7 +91,6 @@ celebrity([First|P], P, _, [person(First)|C], C) :- is_capitalized(First).
 celebrity(P, P, _, C, C). % Case where there isn't a name
 
 % keyword is whatever is not any of the other things...
-keyword(P, P, _, C, C).
 keyword([Keyword|P], P, _, [plot_keyword(Keyword)|C], C) :-
     \+ det([Keyword|P], P, _, C, C),
     \+ quality_adj([Keyword|P], P, _, C, C),
@@ -102,6 +101,7 @@ keyword([Keyword|P], P, _, [plot_keyword(Keyword)|C], C) :-
     \+ modifying_phrase([Keyword|P], P, _, C, C),
     atom_length(Keyword, Length),
     Length > 2.
+keyword(P, P, _, C, C).
 
 % genre is from a hardcoded list of TMDb's recognized genres
 movie_genre([Genre|P], P, _, [genre(Genre)|C], C) :- 
@@ -142,15 +142,16 @@ modifying_phrase(['by'|P], P, _, C0, C2) :-
     celebrity(P, T, _, C0, C1),
     modifying_phrase(T, _, _, C1, C2).
 
+% Modifying phrases about keyword
+modifying_phrase(['about'|P], P, _, C0, C2) :- 
+    writeln(P),
+    keyword(P, T, _, C0, C1),
+    modifying_phrase(T, _, _, C1, C2).
+
 % Modifying phrases about release dates
 modifying_phrase(P, T, _, C0, C2) :- 
     release_date(P, T, _, C0, C1),
     modifying_phrase(T, _, _, C1, C2).
-
-% Modifying phrases about keyword
-% modifying_phrase(['about'|P], P, _, C0, C2) :- 
-%     keyword(P, T, _, C0, C1),
-%     modifying_phrase(T, _, _, C1, C2).
 
 % No modifying phrase
 modifying_phrase(P, P, _, C, C).
