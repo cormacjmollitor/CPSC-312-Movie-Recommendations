@@ -101,8 +101,7 @@ keyword([Keyword|P], P, _, [plot_keyword(Keyword)|C], C) :-
     \+ noun([Keyword|P], P, _, _, _),
     \+ modifying_phrase([Keyword|P], P, _, C, C),
     atom_length(Keyword, Length),
-    Length > 2,
-    writeln(Keyword).
+    Length > 2.
 
 % genre is from a hardcoded list of TMDb's recognized genres
 movie_genre([Genre|P], P, _, [genre(Genre)|C], C) :- 

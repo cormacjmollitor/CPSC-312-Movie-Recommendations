@@ -49,6 +49,8 @@ parse_query_param(person(Name), (with_people, Id)) :-
     get_person_id(Name, Id).
 parse_query_param(genre(Name), (with_genres, Id)) :-
     get_genre_id(Name, Id).
+parse_query_param(plot_keyword(Keyword), (with_keywords, Id)) :-
+    get_keyword_id(Keyword, Id).
 
 % Merges key-value pairs with the same keys to (key,comma-seperatated vals) 
 merge_query_params([], []).
