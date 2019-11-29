@@ -30,16 +30,26 @@ asker('me').
 asker('us').
 
 % e.g. a 2010 Christopher Nolan crime movie starring Ellen Page
-movie_description(P0, P6, Entity, C0, C6) :-
+movie_description(P0, P7, Entity, C0, C7) :-
     det(P0, P1, Entity, C0, C1),
-    release_date(P1, P2, Entity, C1, C2),
-    celebrity(P2, P3, Entity, C2, C3),
-    movie_genre(P3, P4, Entity, C3, C4),
-    noun(P4, P5, Entity, C4, C5),
-    modifying_phrase(P5, P6, Entity, C5, C6).
+    quality_adj(P1, P2, Entity, C1, C2),
+    release_date(P2, P3, Entity, C2, C3),
+    celebrity(P3, P4, Entity, C3, C4),
+    movie_genre(P4, P5, Entity, C4, C5),
+    noun(P5, P6, Entity, C5, C6),
+    modifying_phrase(P6, P7, Entity, C6, C7).
 
 det(['a' | P], P, _, C, C).
+det(['an' | P], P, _, C, C).
 det(P, P, _, C, C).
+
+quality_adj(P, P, _, C, C).
+quality_adj(['bad' | P], P, _, [rating(0, 5, 'Between')|C], C).
+quality_adj(['mediocre' | P], P, _, [rating(5, 6, 'Between')|C], C).
+quality_adj(['okay' | P], P, _, [rating(6, 7, 'Between')|C], C).
+quality_adj(['good' | P], P, _, [rating(7, 8, 'Between')|C], C).
+quality_adj(['great' | P], P, _, [rating(8, 9, 'Between')|C], C).
+quality_adj(['amazing' | P], P, _, [rating(9, 10, 'Between')|C], C).
 
 % Query is looking for release date IN specified year
 release_date([Num|P], P, _, [date(Num, 'Year')|C], C) :- number(Num).
