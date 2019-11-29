@@ -90,6 +90,20 @@ celebrity([First, Last|P], P, _, [person(FullName)|C], C) :-
 celebrity([First|P], P, _, [person(First)|C], C) :- is_capitalized(First).
 celebrity(P, P, _, C, C). % Case where there isn't a name
 
+% keyword is whatever is not any of the other things...
+keyword(P, P, _, C, C).
+keyword([Keyword|P], P, _, [plot_keyword(Keyword)|C], C) :-
+    \+ det([Keyword|P], P, _, C, C),
+    \+ quality_adj([Keyword|P], P, _, C, C),
+    \+ release_date([Keyword|P], P, _, C, C),
+    \+ celebrity([Keyword|P], P, _, C, C),
+    \+ movie_genre([Keyword|P], P, _,  C, C),
+    \+ noun([Keyword|P], P, _, _, _),
+    \+ modifying_phrase([Keyword|P], P, _, C, C),
+    atom_length(Keyword, Length),
+    Length > 2,
+    writeln(Keyword).
+
 % genre is from a hardcoded list of TMDb's recognized genres
 movie_genre([Genre|P], P, _, [genre(Genre)|C], C) :- 
     get_genre_id(Genre, _).
