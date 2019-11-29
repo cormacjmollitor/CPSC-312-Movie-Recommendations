@@ -51,9 +51,9 @@ quality_adj(P, P, _, C, C).
 quality_adj(['bad' | P], P, _, [rating(5, 'LessThan')|C], C).
 quality_adj(['mediocre' | P], P, _, [rating(5, 'GreaterThan'), rating(6, 'LessThan')|C], C).
 quality_adj(['okay' | P], P, _, [rating(6, 'GreaterThan'), rating(7, 'LessThan')|C], C).
-quality_adj(['good' | P], P, _, [rating(7, 'GreaterThan'), rating(8, 'LessThan')|C], C).
-quality_adj(['great' | P], P, _, [rating(8, 'GreaterThan'), rating(9, 'LessThan')|C], C).
-quality_adj(['amazing' | P], P, _, [rating(9, 'GreaterThan'), rating(10, 'LessThan')|C], C).
+quality_adj(['good' | P], P, _, [rating(7, 'GreaterThan') |C], C).
+quality_adj(['great' | P], P, _, [rating(8, 'GreaterThan') |C], C).
+quality_adj(['amazing' | P], P, _, [rating(9, 'GreaterThan') |C], C).
 
 % Query is looking for release date IN specified year
 release_date([Num|P], P, _, [date(Num, 'Year')|C], C) :- number(Num).
