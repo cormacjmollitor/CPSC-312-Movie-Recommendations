@@ -34,16 +34,26 @@ asker('me').
 asker('us').
 
 % e.g. a 2010 Christopher Nolan crime movie starring Ellen Page
-movie_description(P0, P6, Entity, C0, C6) :-
+movie_description(P0, P7, Entity, C0, C7) :-
     det(P0, P1, Entity, C0, C1),
-    release_date(P1, P2, Entity, C1, C2),
-    celebrity(P2, P3, Entity, C2, C3),
-    movie_genre(P3, P4, Entity, C3, C4),
-    noun(P4, P5, Entity, C4, C5),
-    modifying_phrase(P5, P6, Entity, C5, C6).
+    quality_adj(P1, P2, Entity, C1, C2),
+    release_date(P2, P3, Entity, C2, C3),
+    celebrity(P3, P4, Entity, C3, C4),
+    movie_genre(P4, P5, Entity, C4, C5),
+    noun(P5, P6, Entity, C5, C6),
+    modifying_phrase(P6, P7, Entity, C6, C7).
 
 det(['a' | P], P, _, C, C).
+det(['an' | P], P, _, C, C).
 det(P, P, _, C, C).
+
+quality_adj(P, P, _, C, C).
+quality_adj(['bad' | P], P, _, [rating(5, 'LessThan')|C], C).
+quality_adj(['mediocre' | P], P, _, [rating(5, 'GreaterThan'), rating(6, 'LessThan')|C], C).
+quality_adj(['okay' | P], P, _, [rating(6, 'GreaterThan'), rating(7, 'LessThan')|C], C).
+quality_adj(['good' | P], P, _, [rating(7, 'GreaterThan') |C], C).
+quality_adj(['great' | P], P, _, [rating(8, 'GreaterThan') |C], C).
+quality_adj(['amazing' | P], P, _, [rating(9, 'GreaterThan') |C], C).
 
 % Query is looking for release date IN specified year
 release_date([Num|P], P, _, [date(Num, 'Year')|C], C) :- number(Num).
@@ -87,13 +97,23 @@ movie_genre(Tail, Tail, _, C, C).
 noun(['movie' | P], P, _, C, C).
 noun(['film' | P], P, _, C, C).
 
-% modifying_phrase can be 'with ___', 'starring ___', 'by ___', 'directed by ___'...
-% or 'released in 2006', 'from the 1990s'...
-% Handles punctuation at end of sentence.
+% Modifying phrases can specify requirements for any movie aspect (i.e. add any constraint)
+% that is listed under movie_description
+% e.g. quality, actors/directors, release dates, etc.
+% Also handles punctuation at end of sentence.
 modifying_phrase([], _, _, C, C).
 modifying_phrase([?], _, _, C, C).
 modifying_phrase([.], _, _, C, C).
 modifying_phrase([!], _, _, C, C).
+
+% Modifying phrases about quality (rating) of movie
+modifying_phrase(['that', 'is' | P], P, _, C0, C2) :-
+    quality_adj(P, T, _, C0, C1),
+    modifying_phrase(T, _, _, C1, C2).
+modifying_phrase(['that\'s' | P], P, _, C0, C2) :-
+    quality_adj(P, T, _, C0, C1),
+    modifying_phrase(T, _, _, C1, C2).
+
 % Modifying phrases indicating an actor or director
 modifying_phrase(['with'|P], P, _, C0, C2) :- 
     celebrity(P, T, _, C0, C1),
