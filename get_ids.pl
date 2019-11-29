@@ -58,6 +58,3 @@ get_genre_id('War', 10752).
 get_genre_id('war', 10752).
 get_genre_id('Western', 37).
 get_genre_id('western', 37).
-
-take_1([], []).
-take_1([H|_], H).
