@@ -1,4 +1,5 @@
 :- module(dictionary, [starter_phrase/2, movie_description/5]).
+
 :- use_module(get_ids).
 
 starter_phrase(['What', 'is' | P], P).
@@ -6,7 +7,7 @@ starter_phrase(['What', '\'', 's' | T], T).
 starter_phrase([Imperative | T], T) :-
     imperative(Imperative).
 starter_phrase([Imperative, Asker | T], T) :-
-    imperative(Imperative).
+    imperative(Imperative),
     asker(Asker).
 starter_phrase(['I', 'want' | P], P).
 starter_phrase(['I', 'want', 'to', 'watch' | P], P).
@@ -23,8 +24,11 @@ temporal_phrase(['released', 'in' | P], P).
 temporal_phrase(['from' | P], P).
 
 imperative('Give').
+imperative('give').
 imperative('Suggest').
+imperative('suggest').
 imperative('Recommend').
+imperative('recommend').
 
 asker('me').
 asker('us').
