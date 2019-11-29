@@ -11,14 +11,20 @@ promptUser() :-
     readln(Ln),
     question(Ln, Constraints),
     get_recommendation(Constraints, Recommendation),
-    writeln(Recommendation.original_title),
-    writeln(Recommendation.release_date),
-    writeln(Recommendation.overview),
-    write(Constraints). % To show that it's parsing correctly.
+    write_results(Recommendation),
+    write(Constraints). % TEMP: To show that it's parsing correctly.
 
 question(P0, Constraints) :-
     starter_phrase(P0, P1),
     movie_description(P1, _, _, Constraints, _).
+
+% Print movie recommendation text, or a negative string if no movie was found.
+write_results([]) :- 
+    writeln("No movies match that description.").
+write_results(Recommendation) :-
+    writeln(Recommendation.original_title),
+    writeln(Recommendation.release_date),
+    writeln(Recommendation.overview).
 
 % Fetches a movie recommendation when given a list of constraints
 get_recommendation(Constraints, Recommendation) :-
@@ -34,7 +40,7 @@ parse_query_params([Constraint|T], [Param|P]) :-
     parse_query_params(T, P).
 
 % Bi-directional conversion from predicate constraint to key-value pair
-parse_query_param(date(Year, 'Year'), (primary_release_year, Year)).
+parse_query_param(date(Year, 'Year'), ('primary_release_year', Year)).
 parse_query_param(date(Year, 'BeforeYear'), ('release_date.lte', Year)).
 parse_query_param(date(Year, 'AfterYear'), ('release_date.gte', Year)).
 parse_query_param(person(Name), (with_people, Id)) :-
