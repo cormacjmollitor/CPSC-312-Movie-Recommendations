@@ -12,10 +12,20 @@ get_person_id(Name, Id) :-
 % Get the ID for a specified keyword.
 get_keyword_id(Keyword, Id) :-
 	call_keyword_search(Keyword, Response),
-	take_1(Response.results, KeywordResult),
+	get_exact_keyword(Keyword, Response.results, KeywordResult),
 	is_dict(KeywordResult),
 	Id is KeywordResult.id.
 
+% Gets the call_keyword_search response who's name matches the keyword exactly.
+get_exact_keyword(_, [], _).
+get_exact_keyword(Keyword, [Result|T], Result) :-
+	Keyword == Result.get(name).
+get_exact_keyword(Keyword, [Result|T], RecursionResult) :-
+	Name = Result.get(name),
+	dif(Keyword, Name),
+	get_exact_keyword(Keyword, T, RecursionResult).
+
+% Hard-coding of genre ids, since there were enough to enumerate.
 get_genre_id('Action', 28).
 get_genre_id('action', 28).
 get_genre_id('Adventure', 12).

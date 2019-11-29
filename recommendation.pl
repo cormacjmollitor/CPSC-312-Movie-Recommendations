@@ -1,4 +1,4 @@
-:- module(language, [promptUser/0]).
+:- module(recommendation, [promptUser/0]).
 
 :- use_module(api).
 :- use_module(get_ids).
@@ -10,11 +10,11 @@ promptUser() :-
     flush_output(current_output),
     readln(Ln),
     question(Ln, Constraints),
-    % write(Constraints),
     get_recommendation(Constraints, Recommendation),
     write_results(Recommendation),
     write(Constraints). % TEMP: To show that it's parsing correctly.
 
+% Fetches constraints through dictionary.pl
 question(P0, Constraints) :-
     starter_phrase(P0, P1),
     movie_description(P1, _, _, Constraints, _).
