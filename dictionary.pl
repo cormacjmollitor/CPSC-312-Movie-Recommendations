@@ -93,13 +93,23 @@ movie_genre(Tail, Tail, _, C, C).
 noun(['movie' | P], P, _, C, C).
 noun(['film' | P], P, _, C, C).
 
-% modifying_phrase can be 'with ___', 'starring ___', 'by ___', 'directed by ___'...
-% or 'released in 2006', 'from the 1990s'...
-% Handles punctuation at end of sentence.
+% Modifying phrases can specify requirements for any movie aspect (i.e. add any constraint)
+% that is listed under movie_description
+% e.g. quality, actors/directors, release dates, etc.
+% Also handles punctuation at end of sentence.
 modifying_phrase([], _, _, C, C).
 modifying_phrase([?], _, _, C, C).
 modifying_phrase([.], _, _, C, C).
 modifying_phrase([!], _, _, C, C).
+
+% Modifying phrases about quality (rating) of movie
+modifying_phrase(['that', 'is' | P], P, _, C0, C2) :-
+    quality_adj(P, T, _, C0, C1),
+    modifying_phrase(T, _, _, C1, C2).
+modifying_phrase(['that\'s' | P], P, _, C0, C2) :-
+    quality_adj(P, T, _, C0, C1),
+    modifying_phrase(T, _, _, C1, C2).
+
 % Modifying phrases indicating an actor or director
 modifying_phrase(['with'|P], P, _, C0, C2) :- 
     celebrity(P, T, _, C0, C1),
