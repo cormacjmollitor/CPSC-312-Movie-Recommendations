@@ -70,7 +70,12 @@ release_date(['from', 'before', Num|P], P, _, [date(Num, 'BeforeYear')|C], C) :-
 release_date(['made', 'before', Num|P], P, _, [date(Num, 'BeforeYear')|C], C) :- number(Num).
 release_date(['released', 'before', Num|P], P, _, [date(Num, 'BeforeYear')|C], C) :- number(Num).
 
-% Query does not specify a year
+% Query does not specify a year but specifies a timeframe
+release_date(['new'|P], P, _, [date(2019, 'Year')|C], C).
+release_date(['recent'|P], P, _, [date(2016, 'AfterYear')|C], C).
+release_date(['old'|P], P, _, [date(2010, 'BeforeYear')|C], C).
+
+% Query does not specify a timeframe nor a year
 release_date(P, P, _, C, C).
 
 % check for capitalization to determine if this is a person.
@@ -149,6 +154,12 @@ modifying_phrase(['about'|P], P, _, C0, C2) :-
     modifying_phrase(T, _, _, C1, C2).
 
 % Modifying phrases about release dates
+modifying_phrase(['that', 'is' | P], P, _, C0, C2) :-
+    release_date(P, T, _, C0, C1),
+    modifying_phrase(T, _, _, C1, C2).
+modifying_phrase(['that\'s' | P], P, _, C0, C2) :-
+    release_date(P, T, _, C0, C1),
+    modifying_phrase(T, _, _, C1, C2).
 modifying_phrase(P, T, _, C0, C2) :- 
     release_date(P, T, _, C0, C1),
     modifying_phrase(T, _, _, C1, C2).
