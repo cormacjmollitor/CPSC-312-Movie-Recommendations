@@ -18,7 +18,7 @@ get_keyword_id(Keyword, Id) :-
 
 % Gets the call_keyword_search response who's name matches the keyword exactly.
 get_exact_keyword(_, [], _).
-get_exact_keyword(Keyword, [Result|T], Result) :-
+get_exact_keyword(Keyword, [Result|_], Result) :-
 	Keyword == Result.get(name).
 get_exact_keyword(Keyword, [Result|T], RecursionResult) :-
 	Name = Result.get(name),
