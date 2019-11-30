@@ -150,7 +150,6 @@ modifying_phrase(['by'|P], P, _, C0, C2) :-
 
 % Modifying phrases about keyword
 modifying_phrase(['about'|P], P, _, C0, C2) :- 
-    writeln(P),
     keyword(P, T, _, C0, C1),
     modifying_phrase(T, _, _, C1, C2).
 
