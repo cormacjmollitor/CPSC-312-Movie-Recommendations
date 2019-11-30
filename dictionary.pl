@@ -46,6 +46,7 @@ movie_description(P0, P8, Entity, C0, C8) :-
 
 det(['a' | P], P, _, C, C).
 det(['an' | P], P, _, C, C).
+det(['the' | P], P, _, C, C).
 det(P, P, _, C, C).
 
 quality_adj(['bad' | P], P, _, [rating(5, 'LessThan')|C], C).
