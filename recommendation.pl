@@ -11,8 +11,7 @@ promptUser() :-
     readln(Ln),
     question(Ln, Constraints),
     get_recommendation(Constraints, Recommendation),
-    write_results(Recommendation),
-    write(Constraints). % TEMP: To show that it's parsing correctly.
+    write_results(Recommendation).
 
 % Fetches constraints through dictionary.pl
 question(P0, Constraints) :-
